@@ -1,0 +1,29 @@
+class Solution {
+    class Coordinate {
+        int[] point;
+        double dis;
+        public Coordinate(int[] point, double dis) {
+            this.point = point;
+            this.dis = dis;
+        }
+    }
+    
+    public int[][] kClosest(int[][] points, int k) {
+        PriorityQueue<Coordinate> queue = new PriorityQueue<>((x, y) -> Double.compare(y.dis, x.dis));
+        for (int[] point : points) {
+            double dis = Math.sqrt(point[0] * point[0] + point[1] * point[1]);
+            if (queue.size() < k) {
+                queue.offer(new Coordinate(point, dis));
+            } else if (queue.peek().dis > dis) {
+                queue.poll();
+                queue.offer(new Coordinate(point, dis));
+            }
+        }
+        int[][] res = new int[k][2];
+        for (int i = 0; i < k; i++) {
+            res[i] = queue.poll().point;
+        }
+        return res;
+    }
+
+}
